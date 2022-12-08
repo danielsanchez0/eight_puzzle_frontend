@@ -114,7 +114,7 @@ const ButtonContainer = styled.div`
   }
 `
 
-const pasos = [
+let pasos = [
   "1,2,3,4,5,6,7,8",
   "1,2,3,4,5,6,7,9",
   "1,2,3,4,5,7,8,1",
@@ -130,6 +130,8 @@ const  Grid = ()=>{
     ["", "", ""],
     ["", "", ""],
   ]);
+  const [TextoInicial, setTextoInicial] = useState("")
+  const [TextoEsperado, setTextoEsperado] = useState("")
 
 
   const [tableroInicial,setTableroInicial] = useState(["","","","","","","","",""])
@@ -162,6 +164,7 @@ useEffect(() => {
       if(step===pasos.length){
         setEstado(false)
         setStep(0)
+        alert("Se termino el juego");
       }
     }, 2500);
 
@@ -235,9 +238,121 @@ const aprobarMatriz = ()=>{
    }
 }
 
+const datosObjetivo = (tablero)=>{
+  let texto = ""
+  for (let index = 0; index < tablero.length; index++) {
+    texto = texto + tablero[index];
+    if (tablero[index] == "") {
+      texto = texto + "0";
+    }
+    if (index < tablero.length-1) {
+      texto = texto + ",";
+      
+    }
+  }
+  console.log(texto)
+  return texto
+}
+
+
 const algoritmoEstrella = ()=>{
   setEstado(true)
+  
   console.log("algoritmoEstrella")
+  fetch("http://127.0.0.1:8000/puzzle-estrella", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inicial: datosObjetivo(tableroInicial),
+        objetivo: datosObjetivo(tableroEsperado)
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        
+        pasos = result["movimientos"];
+        console.log(pasos);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
+
+const algoritmoAnchura = ()=>{
+  setEstado(true)
+  
+  console.log("algoritmoAnchura")
+  fetch("http://127.0.0.1:8000/puzzle-anchura", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inicial: datosObjetivo(tableroInicial),
+        objetivo: datosObjetivo(tableroEsperado)
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        
+        pasos = result["movimientos"];
+        console.log(pasos);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
+
+const algoritmoPrimero= ()=>{
+  setEstado(true)
+  
+  console.log("algoritmoPrimero")
+  fetch("http://127.0.0.1:8000/puzzle-primero", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inicial: datosObjetivo(tableroInicial),
+        objetivo: datosObjetivo(tableroEsperado)
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        
+        pasos = result["movimientos"];
+        console.log(pasos);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}
+
+const algoritmoProfundidad = ()=>{
+  setEstado(true)
+  
+  console.log("algoritmoAnchura")
+  fetch("http://127.0.0.1:8000/puzzle-profundidad", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inicial: datosObjetivo(tableroInicial),
+        objetivo: datosObjetivo(tableroEsperado)
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        
+        pasos = result["movimientos"];
+        console.log(pasos);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 }
 
 	return (
@@ -342,9 +457,9 @@ const algoritmoEstrella = ()=>{
                        <ButtonContainer>
 
                     <button type='button' className={styles.button} onClick={algoritmoEstrella} > A* </button>
-                    <button type='button' className={styles.button} > Anchura </button>
-                    <button type='button' className={styles.button} > Profundidad </button>
-                    <button type='button' className={styles.button} > Voraz </button>
+                    <button type='button' className={styles.button} onClick={algoritmoAnchura}> Anchura </button>
+                    <button type='button' className={styles.button} onClick={algoritmoProfundidad}> Profundidad </button>
+                    <button type='button' className={styles.button} onClick={algoritmoPrimero}> Voraz </button>
                     <button type='button' className={styles.button} > Costo Uniforme </button>
                   </ButtonContainer>
                   </div>
