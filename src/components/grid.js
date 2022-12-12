@@ -2,6 +2,7 @@ import styles from "./TicTacToe.module.css";
 import Ribbon from "./Ribbon"
 
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 import styled from 'styled-components'
 import {Col,Row} from "reactstrap"
@@ -132,6 +133,14 @@ const  Grid = ()=>{
   ]);
   const [TextoInicial, setTextoInicial] = useState("")
   const [TextoEsperado, setTextoEsperado] = useState("")
+  const [aEstrellaNodos, setAEstrellaNodos] = useState(0)
+  const [anchuraNodos, setAnchuraNodos] = useState(0)
+  const [profundidadNodos, setProfundidadNodos] = useState(0)
+  const [primeroNodos, setPrimeroNodos] = useState(0)
+  const [longCaminoEstrella, setLongCaminoEstrella] = useState(0)
+  const [longCaminoAnchura, setLongCaminoAnchura] = useState(0)
+  const [longCaminoProfundidad, setLongCaminoProfundidad] = useState(0)
+  const [longCaminoPrimero, setLongCaminoPrimero] = useState(0)
 
 
   const [tableroInicial,setTableroInicial] = useState(["","","","","","","","",""])
@@ -164,13 +173,21 @@ useEffect(() => {
       if(step===pasos.length){
         setEstado(false)
         setStep(0)
-        alert("Se termino el juego");
+        alerta("Se ha terminado el proceso de busqueda","Busqueda finalizada","success")
       }
     }, 2500);
 
     return () => clearTimeout(timer);
   }
 });
+
+const alerta = ( texto,titulo,icono) => {
+  Swal.fire(
+    titulo,
+    texto,
+    icono
+  )
+}
 
 
 const modificarMatrizInicial = (posicion,valor) => {
@@ -231,10 +248,10 @@ const aprobarMatriz = ()=>{
    if(verificarEspacioVacio(tableroInicial) && verificarEspacioVacio(tableroEsperado) 
      && verificarElementosRepetidos(tableroInicial) && verificarElementosRepetidos(tableroEsperado) ){
      setAprobacion(true)
-     alert("aprobada")
+     alerta("La matriz cumple los requisitos","Aprobado","success")
    }else{
      setAprobacion(false)
-     alert("la matriz no cumple los requisitos")
+      alerta("La matriz no cumple los requisitos","Error","info")
    }
 }
 
@@ -273,7 +290,9 @@ const algoritmoEstrella = ()=>{
       .then((result) => {
         
         pasos = result["movimientos"];
-        console.log(pasos);
+        setAEstrellaNodos(result["cantidad"])
+        setLongCaminoEstrella(result["longitudSol"])
+        console.log(aEstrellaNodos);
       })
       .catch((err) => {
         console.log(err);
@@ -298,6 +317,11 @@ const algoritmoAnchura = ()=>{
       .then((result) => {
         
         pasos = result["movimientos"];
+        setAnchuraNodos(result["cantidad"]);
+        setLongCaminoAnchura(result["longitudSol"])
+        alert(result["cantidad"])
+        console.log("ANCHUARA " +anchuraNodos);
+        console.log("ESTRELLA " + aEstrellaNodos);
         console.log(pasos);
       })
       .catch((err) => {
@@ -323,6 +347,13 @@ const algoritmoPrimero= ()=>{
       .then((result) => {
         
         pasos = result["movimientos"];
+        setPrimeroNodos(result["cantidad"]);
+        setLongCaminoPrimero(result["longitudSol"])
+        
+        console.log(aEstrellaNodos);
+        console.log(anchuraNodos);
+        console.log(profundidadNodos);
+        console.log(primeroNodos);
         console.log(pasos);
       })
       .catch((err) => {
@@ -346,8 +377,12 @@ const algoritmoProfundidad = ()=>{
     })
       .then((res) => res.json())
       .then((result) => {
-        
+        setProfundidadNodos(result["cantidad"]);
+        setLongCaminoProfundidad(result["longitudSol"])
         pasos = result["movimientos"];
+        console.log(aEstrellaNodos);
+        console.log(anchuraNodos);
+        console.log(profundidadNodos);
         console.log(pasos);
       })
       .catch((err) => {
