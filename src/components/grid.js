@@ -449,10 +449,15 @@ const Grid = () => {
   };
 
   const algoritmoProfundidad = () => {
-    setEstado(true);
     setNombreAlgoritmo("Profundidad");
-
+    setEstado(true);
+    setEstadoEjecucion(true);
     console.log("algoritmoAnchura");
+    setBoard([
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ]);
     fetch("http://127.0.0.1:8000/puzzle-profundidad", {
       method: "POST",
       headers: {
