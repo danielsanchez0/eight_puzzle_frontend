@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Collapse,
   Navbar,
@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem,
   NavbarText,
-} from 'reactstrap';
+} from "reactstrap";
 
 function Menu(args) {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,10 +21,13 @@ function Menu(args) {
 
   return (
     <div>
-      <Navbar {...args} style={{
-        backgroundColor: '#ffc107',
-      }}>
-        <NavbarBrand href="/">reactstrap</NavbarBrand>
+      <Navbar
+        {...args}
+        style={{
+          backgroundColor: "#ffc107",
+        }}
+      >
+        <NavbarBrand href="/">Sistemas Inteligentes I</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
