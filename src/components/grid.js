@@ -154,7 +154,7 @@ const  Grid = ()=>{
   const [estadoEjecucion, setEstadoEjecucion] = useState(false)
 
   const [tableroInicial,setTableroInicial] = useState(["","","","","","","","",""])
-  const [tableroEsperado,setTableroEsperado] = useState(["1","2","3","4","5","6","7","8",""])
+  const [tableroEsperado,setTableroEsperado] = useState(["","","","","","","","",""])
 
   const crearMatriz = (paso)=>{
 
@@ -176,7 +176,9 @@ useEffect(() => {
 
       if(step<pasos.length){
       const mt = crearMatriz(pasos[step])
+      
       setBoard(mt)
+      setEstadoEjecucion(false)
       console.log('This will run after 1 second!')
       setStep(step+1)
     }
@@ -291,7 +293,12 @@ const algoritmoEstrella = ()=>{
   setEstado(true)
   setNombreAlgoritmo("Estrella")
   console.log("INICIAL")
-  
+  setBoard([
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ])
+
   console.log("algoritmoEstrella")
   fetch("http://127.0.0.1:8000/puzzle-estrella", {
       method: "POST",
@@ -305,11 +312,12 @@ const algoritmoEstrella = ()=>{
     })
       .then((res) => res.json())
       .then((result) => {
-        setEstadoEjecucion(false)
+        
         pasos = result["movimientos"];
         setAEstrellaNodos(result["cantidad"])
         setLongCaminoEstrella(result["longitudSol"])
         console.log(aEstrellaNodos);
+       
         
       })
       .catch((err) => {
@@ -321,6 +329,11 @@ const algoritmoAnchura = ()=>{
   setNombreAlgoritmo("Anchura")
   setEstado(true)
   setEstadoEjecucion(true)
+  setBoard([
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ])
   console.log("algoritmoAnchura")
   fetch("http://127.0.0.1:8000/puzzle-anchura", {
       method: "POST",
@@ -342,7 +355,6 @@ const algoritmoAnchura = ()=>{
         console.log("ANCHUARA " +anchuraNodos);
         console.log("ESTRELLA " + aEstrellaNodos);
         console.log(pasos);
-        setEstadoEjecucion(false)
       })
       .catch((err) => {
         console.log(err);
@@ -353,6 +365,11 @@ const algoritmoPrimero= ()=>{
   setEstado(true)
   setNombreAlgoritmo("Primero")
   setEstadoEjecucion(true) 
+  setBoard([
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+  ])
   console.log("algoritmoPrimero")
   fetch("http://127.0.0.1:8000/puzzle-primero", {
       method: "POST",
@@ -366,7 +383,6 @@ const algoritmoPrimero= ()=>{
     })
       .then((res) => res.json())
       .then((result) => {
-        setEstadoEjecucion(false)
         pasos = result["movimientos"];
         setPrimeroNodos(result["cantidad"]);
         setLongCaminoPrimero(result["longitudSol"])
@@ -413,7 +429,6 @@ const algoritmoProfundidad = ()=>{
 }
 
 const leerArchivo = (e) => {
-  alert("hola")
   const file = e.target.files[0];
   const reader = new FileReader();
   console.log(file)
@@ -429,25 +444,26 @@ const leerArchivo = (e) => {
 }
 
 const leerXML = (e) => {
-  alert("hola")
   var xml = new XMLParser().parseFromString(e);
-  var ya = xml.getElementsByTagName("Inicios")
+  var valoresIniciales = xml.getElementsByTagName("Inicios")
+  var valoresObjetivo = xml.getElementsByTagName("Objetivos")
   var nums = [];
-  alert(ya[0].children.length)
-  if (ya!=null) {
-    console.log(ya[0].children[1].value)
-    console.log(ya[0].children[2].value)
+  alert(valoresIniciales[0].children.length)
+  if (valoresIniciales!=null && valoresIniciales[0].children.length==9 && valoresObjetivo!=null && valoresObjetivo[0].children.length==9) {
     setTableroInicial([
-      ya[0].children[0].value==0? '': ya[0].children[0].value, ya[0].children[1].value==0? '': ya[0].children[1].value, ya[0].children[2].value==0? '': ya[0].children[2].value ,
-      ya[0].children[3].value==0? '': ya[0].children[3].value, ya[0].children[4].value==0? '': ya[0].children[4].value, ya[0].children[5].value==0? '': ya[0].children[5].value,
-      ya[0].children[6].value==0? '': ya[0].children[6].value, ya[0].children[7].value==0? '': ya[0].children[7].value, ya[0].children[8].value==0? '': ya[0].children[8].value
+      valoresIniciales[0].children[0].value==0? '': valoresIniciales[0].children[0].value, valoresIniciales[0].children[1].value==0? '': valoresIniciales[0].children[1].value, valoresIniciales[0].children[2].value==0? '': valoresIniciales[0].children[2].value ,
+      valoresIniciales[0].children[3].value==0? '': valoresIniciales[0].children[3].value, valoresIniciales[0].children[4].value==0? '': valoresIniciales[0].children[4].value, valoresIniciales[0].children[5].value==0? '': valoresIniciales[0].children[5].value,
+      valoresIniciales[0].children[6].value==0? '': valoresIniciales[0].children[6].value, valoresIniciales[0].children[7].value==0? '': valoresIniciales[0].children[7].value, valoresIniciales[0].children[8].value==0? '': valoresIniciales[0].children[8].value
     ]);
+    setTableroEsperado([valoresObjetivo[0].children[0].value==0? '': valoresObjetivo[0].children[0].value, valoresObjetivo[0].children[1].value==0? '': valoresObjetivo[0].children[1].value, valoresObjetivo[0].children[2].value==0? '': valoresObjetivo[0].children[2].value ,
+    valoresObjetivo[0].children[3].value==0? '': valoresObjetivo[0].children[3].value, valoresObjetivo[0].children[4].value==0? '': valoresObjetivo[0].children[4].value, valoresObjetivo[0].children[5].value==0? '': valoresObjetivo[0].children[5].value,
+    valoresObjetivo[0].children[6].value==0? '': valoresObjetivo[0].children[6].value, valoresObjetivo[0].children[7].value==0? '': valoresObjetivo[0].children[7].value, valoresObjetivo[0].children[8].value==0? '': valoresObjetivo[0].children[8].value]);
   }
-  // for (let index = 0; index < ya[0].children.length; index++) {
-  //   console.log(ya[0].children[index].value)
+  // for (let index = 0; index < valoresIniciales[0].children.length; index++) {
+  //   console.log(valoresIniciales[0].children[index].value)
   // }
-  //console.log(ya[0].children[0].value)
-  //console.log(ya[0])
+  //console.log(valoresIniciales[0].children[0].value)
+  //console.log(valoresIniciales[0])
 
 }
 
@@ -460,7 +476,12 @@ const leerXML = (e) => {
                     
                   </ButtonContainer>
                  
-
+                  <input
+                type="file"
+                accept="application/xml"
+                name="files"
+                onChange={leerArchivo}
+              />
         <ContentWrapper>
         
         <form>
@@ -486,19 +507,19 @@ const leerXML = (e) => {
             <br />
             <form>
               <p>estado esperado</p>
-                      <input type="number" min="1" max="8" value="1" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(0,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="2" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(1,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="3" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(2,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[0]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(0,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[1]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(1,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[2]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(2,e.target.value)}/>
                       <br/>
 
-                      <input type="number" min="1" max="8" value="4" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(3,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="5" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(4,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="6" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(5,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[3]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(3,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[4]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(4,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[5]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(5,e.target.value)}/>
                       <br/>
 
-                      <input type="number" min="1" max="8" value="7" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(6,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(7,e.target.value)}/>
-                      <input type="number" min="1" max="8" value="" className={styles.cell_inicial}  onChange={(e)=>modificarMatrizEsperado(8,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[6]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(6,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[7]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizEsperado(7,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroEsperado[8]} className={styles.cell_inicial}  onChange={(e)=>modificarMatrizEsperado(8,e.target.value)}/>
 
                       <br />
               </form>
@@ -507,22 +528,11 @@ const leerXML = (e) => {
       </div>
 
       <div className="col-md-9">
-      <div className="col-md-3">
+      
   
-      <input
-                type="file"
-                accept="application/xml"
-                name="files"
-                onChange={leerArchivo}
-              />
-      <button
-                className="btn btn-primary"
-                
-              >
-                Insertar Archivo
-              </button>
+     
                   
-      </div>
+    
         <AppWrapper>
         <ContentWrapper>
               <Content>
@@ -546,35 +556,35 @@ const leerXML = (e) => {
                     <div className={styles.container}>
                       <div className={styles.col}>
                         <span className={styles.cell}>
-                          {board[0][0]}
+                          {board[0][0] == 0 ? "" : board[0][0]}
                         </span>
                         <span className={styles.cell}>
-                          {board[0][1]}
+                          {board[0][1] == 0 ? "" : board[0][1]}
                         </span>
                         <span className={styles.cell}>
-                          {board[0][2]}
-                        </span>
-                      </div>
-                      <div className={styles.col}>
-                        <span className={styles.cell}>
-                          {board[1][0]}
-                        </span>
-                        <span className={styles.cell}>
-                          {board[1][1]}
-                        </span>
-                        <span className={styles.cell}>
-                          {board[1][2]}
+                          {board[0][2] == 0 ? "" : board[0][2]}
                         </span>
                       </div>
                       <div className={styles.col}>
                         <span className={styles.cell}>
-                          {board[2][0]}
+                          {board[1][0]== 0 ? "" : board[1][0]}
                         </span>
                         <span className={styles.cell}>
-                          {board[2][1]}
+                          {board[1][1] == 0 ? "" : board[1][1]}
                         </span>
                         <span className={styles.cell}>
-                          {board[2][2]}
+                          {board[1][2]== 0 ? "" : board[1][2]}
+                        </span>
+                      </div>
+                      <div className={styles.col}>
+                        <span className={styles.cell}>
+                          {board[2][0]== 0 ? "" : board[2][0]}
+                        </span>
+                        <span className={styles.cell}>
+                          {board[2][1]== 0 ? "" : board[2][1]}
+                        </span>
+                        <span className={styles.cell}>
+                          {board[2][2]== 0 ? "" : board[2][2]}
                         </span>
                       </div>
                     </div>
@@ -587,7 +597,7 @@ const leerXML = (e) => {
                     <button type='button' className={styles.button} onClick={algoritmoAnchura}> Anchura </button>
                     <button type='button' className={styles.button} onClick={algoritmoProfundidad}> Profundidad </button>
                     <button type='button' className={styles.button} onClick={algoritmoPrimero}> Primero Mejor </button>
-                    <button type='button' className={styles.button} > Costo Uniforme </button>
+                    {/* <button type='button' className={styles.button} > Costo Uniforme </button> */}
                   </ButtonContainer>
                   </div>
                   : <div><p>Presiona aprobar para verificar la validez de tus valores.</p></div>}
