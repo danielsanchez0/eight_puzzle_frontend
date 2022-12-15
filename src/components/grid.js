@@ -127,7 +127,7 @@ const AppWrapper = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  position: relative;tableroInicial
+  position: relative;
   display: flex;
   margin: 10px;
   div {
@@ -530,9 +530,9 @@ const Grid = () => {
               primeroNodos,
             ],
             backgroundColor: [
-              "rgba(255, 99, 132, 0.5)",
-              "rgba(54, 162, 235, 0.5)",
-              "rgba(255, 206, 86, 0.5)",
+              "#FF5733",
+              "#FFC300",
+              "#3E5569",
               "rgba(75, 192, 192, 0.5)",
             ],
           },
@@ -552,9 +552,9 @@ const Grid = () => {
               longCaminoPrimero,
             ],
             backgroundColor: [
-              "rgba(0, 255, 0, 0.2)",
-              "rgba(54, 162, 235, 0.5)",
-              "rgba(255, 206, 86, 0.5)",
+              "#FF5733",
+              "#FFC300",
+              "#3E5569",
               "rgba(75, 192, 192, 0.5)",
             ],
           },
@@ -1049,48 +1049,42 @@ const Grid = () => {
                       className={styles.button}
                       onClick={algoritmoEstrella}
                     >
-                      {" "}
-                      A*{" "}
+                      A*
                     </button>
                     <button
                       type="button"
                       className={styles.button}
                       onClick={algoritmoAnchura}
                     >
-                      {" "}
-                      Anchura{" "}
+                      Anchura
                     </button>
                     <button
                       type="button"
                       className={styles.button}
                       onClick={algoritmoProfundidad}
                     >
-                      {" "}
-                      Profundidad{" "}
+                      Profundidad
                     </button>
                     <button
                       type="button"
                       className={styles.button}
                       onClick={algoritmoPrimero}
                     >
-                      {" "}
-                      Primero Mejor{" "}
+                      Primero Mejor
                     </button>
                     <button
                       type="button"
                       className={styles.button}
                       onClick={estadisticas}
                     >
-                      {" "}
-                      Estadisticas{" "}
+                      Estadisticas
                     </button>
                     <button
                       type="button"
                       className={styles.button}
                       onClick={downloadXML}
                     >
-                      {" "}
-                      XML{" "}
+                      XML
                     </button>
                     {/* <button type='button' className={styles.button} > Costo Uniforme </button> */}
                   </ButtonContainer>
