@@ -110,7 +110,7 @@ const AppWrapper = styled.div`
 `
 
 const ButtonContainer = styled.div`
-  position: relative;
+  position: relative;tableroInicial
   display: flex;
   margin: 10px;
   div {
@@ -152,7 +152,6 @@ const  Grid = ()=>{
   const [files, setFiles] = useState("");
 
   const [estadoEjecucion, setEstadoEjecucion] = useState(false)
-
 
   const [tableroInicial,setTableroInicial] = useState(["","","","","","","","",""])
   const [tableroEsperado,setTableroEsperado] = useState(["1","2","3","4","5","6","7","8",""])
@@ -224,6 +223,7 @@ const modificarMatrizEsperado = (posicion,valor) => {
 
 const verificarElementosRepetidos = (lista) => {
   let duplicados = []
+  
  
   const tempArray = [...lista].sort()
 
@@ -234,6 +234,7 @@ const verificarElementosRepetidos = (lista) => {
   }
 
   if(duplicados.length>0){
+    alerta("Hay elementos repetidos en la matriz","Error","error")
     return false
   }
 
@@ -242,10 +243,12 @@ const verificarElementosRepetidos = (lista) => {
 
 const verificarEspacioVacio = (lista) => {
   let espacios = 0
-
+  console.log("lista: ")
+  console.log(lista);
   for (let i = 0; i < lista.length; i++) {
     if (lista[i] === "") {
       espacios = espacios + 1
+      alerta("vacio");
     }
   }
 
@@ -287,6 +290,8 @@ const algoritmoEstrella = ()=>{
   setEstadoEjecucion(true)
   setEstado(true)
   setNombreAlgoritmo("Estrella")
+  console.log("INICIAL")
+  
   console.log("algoritmoEstrella")
   fetch("http://127.0.0.1:8000/puzzle-estrella", {
       method: "POST",
@@ -429,10 +434,18 @@ const leerXML = (e) => {
   var ya = xml.getElementsByTagName("Inicios")
   var nums = [];
   alert(ya[0].children.length)
-  for (let index = 0; index < ya[0].children.length; index++) {
-    console.log(ya[0].children[index].value)
-    
+  if (ya!=null) {
+    console.log(ya[0].children[1].value)
+    console.log(ya[0].children[2].value)
+    setTableroInicial([
+      ya[0].children[0].value==0? '': ya[0].children[0].value, ya[0].children[1].value==0? '': ya[0].children[1].value, ya[0].children[2].value==0? '': ya[0].children[2].value ,
+      ya[0].children[3].value==0? '': ya[0].children[3].value, ya[0].children[4].value==0? '': ya[0].children[4].value, ya[0].children[5].value==0? '': ya[0].children[5].value,
+      ya[0].children[6].value==0? '': ya[0].children[6].value, ya[0].children[7].value==0? '': ya[0].children[7].value, ya[0].children[8].value==0? '': ya[0].children[8].value
+    ]);
   }
+  // for (let index = 0; index < ya[0].children.length; index++) {
+  //   console.log(ya[0].children[index].value)
+  // }
   //console.log(ya[0].children[0].value)
   //console.log(ya[0])
 
@@ -452,19 +465,19 @@ const leerXML = (e) => {
         
         <form>
         <p>estado inicial</p>
-                      <input type="number" min="1" max="8" value={1} maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(0,e.target.value)} />
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(1,e.target.value)} />
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(2,e.target.value)} />
+                      <input type="number" min="1" max="8" value={tableroInicial[0]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(0,e.target.value)} />
+                      <input type="number" min="1" max="8" value={tableroInicial[1]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(1,e.target.value)} />
+                      <input type="number" min="1" max="8" value={tableroInicial[2]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(2,e.target.value)} />
                       <br/>
 
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(3,e.target.value)} />
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(4,e.target.value)} />
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(5,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} value={tableroInicial[3]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(3,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} value={tableroInicial[4]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(4,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} value = {tableroInicial[5]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(5,e.target.value)} />
                       <br/>
 
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(6,e.target.value)} />
-                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(7,e.target.value)}/>
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(8,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroInicial[6]} maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(6,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} value={tableroInicial[7]} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(7,e.target.value)}/>
+                      <input type="number" min="1" max="8" value={tableroInicial[8]}className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(8,e.target.value)}/>
 
                       <br />
               </form>
