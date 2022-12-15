@@ -162,6 +162,7 @@ const Grid = () => {
   const [textoArchivo, setTextoArchivo] = useState("");
   const [nombreArchivo, setNombreArchivo] = useState("");
   const [files, setFiles] = useState("");
+  const [archivo, setArchivo] = useState(true);
   const [mostrar, setMostrar] = useState(0);
   const options = {
     responsive: true,
@@ -264,7 +265,7 @@ const Grid = () => {
     }
 
     tableroEsperado[posicion] = valor;
-    setTableroEsperado(tableroInicial);
+    setTableroEsperado(tableroEsperado);
     console.log("tablero Esperado: " + tableroEsperado);
   };
 
@@ -478,6 +479,7 @@ const Grid = () => {
   };
 
   const leerArchivo = (e) => {
+    setArchivo(false);
     const file = e.target.files[0];
     const reader = new FileReader();
     console.log(file);
@@ -650,39 +652,275 @@ const Grid = () => {
             Aprobar{" "}
           </button>
         </ButtonContainer>
-
         <input
           type="file"
           accept="application/xml"
           name="files"
           onChange={leerArchivo}
         />
+
         <ContentWrapper>
+          {archivo ? (
+            <form>
+              <p>estado inicial</p>
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(0, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(1, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(2, e.target.value)}
+              />
+              <br />
+
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(3, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(4, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(5, e.target.value)}
+              />
+              <br />
+
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(6, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(7, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(8, e.target.value)}
+              />
+
+              <br />
+            </form>
+          ) : (
+            <form>
+              <p>estado inicial</p>
+              <input
+                type="number"
+                min="1"
+                max="8"
+                value={tableroInicial[0]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(0, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                value={tableroInicial[1]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(1, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                value={tableroInicial[2]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(2, e.target.value)}
+              />
+              <br />
+
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                value={tableroInicial[3]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(3, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                value={tableroInicial[4]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(4, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                value={tableroInicial[5]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(5, e.target.value)}
+              />
+              <br />
+
+              <input
+                type="number"
+                min="1"
+                max="8"
+                value={tableroInicial[6]}
+                maxLength={1}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(6, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                maxLength={1}
+                value={tableroInicial[7]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(7, e.target.value)}
+              />
+              <input
+                type="number"
+                min="1"
+                max="8"
+                value={tableroInicial[8]}
+                className={styles.cell_inicial}
+                onChange={(e) => modificarMatrizInicial(8, e.target.value)}
+              />
+
+              <br />
+            </form>
+          )}
+        </ContentWrapper>
+        <br />
+        {archivo ? (
           <form>
-            <p>estado inicial</p>
+            <p>estado esperado</p>
             <input
               type="number"
               min="1"
               max="8"
-              value={tableroInicial[0]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(0, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(0, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              value={tableroInicial[1]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(1, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(1, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              value={tableroInicial[2]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(2, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(2, e.target.value)}
+            />
+            <br />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(3, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(4, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(5, e.target.value)}
+            />
+            <br />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(6, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(7, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(8, e.target.value)}
+            />
+          </form>
+        ) : (
+          <form>
+            <p>estado esperado</p>
+            <input
+              type="number"
+              min="1"
+              max="8"
+              value={tableroEsperado[0]}
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(0, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              value={tableroEsperado[1]}
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(1, e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              max="8"
+              value={tableroEsperado[2]}
+              className={styles.cell_inicial}
+              onChange={(e) => modificarMatrizEsperado(2, e.target.value)}
             />
             <br />
 
@@ -690,28 +928,25 @@ const Grid = () => {
               type="number"
               min="1"
               max="8"
-              maxLength={1}
-              value={tableroInicial[3]}
+              value={tableroEsperado[3]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(3, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(3, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              maxLength={1}
-              value={tableroInicial[4]}
+              value={tableroEsperado[4]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(4, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(4, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              maxLength={1}
-              value={tableroInicial[5]}
+              value={tableroEsperado[5]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(5, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(5, e.target.value)}
             />
             <br />
 
@@ -719,115 +954,30 @@ const Grid = () => {
               type="number"
               min="1"
               max="8"
-              value={tableroInicial[6]}
-              maxLength={1}
+              value={tableroEsperado[6]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(6, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(6, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              maxLength={1}
-              value={tableroInicial[7]}
+              value={tableroEsperado[7]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(7, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(7, e.target.value)}
             />
             <input
               type="number"
               min="1"
               max="8"
-              value={tableroInicial[8]}
+              value={tableroEsperado[8]}
               className={styles.cell_inicial}
-              onChange={(e) => modificarMatrizInicial(8, e.target.value)}
+              onChange={(e) => modificarMatrizEsperado(8, e.target.value)}
             />
 
             <br />
           </form>
-        </ContentWrapper>
-
-        <br />
-        <form>
-          <p>estado esperado</p>
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[0]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(0, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[1]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(1, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[2]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(2, e.target.value)}
-          />
-          <br />
-
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[3]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(3, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[4]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(4, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[5]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(5, e.target.value)}
-          />
-          <br />
-
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[6]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(6, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[7]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(7, e.target.value)}
-          />
-          <input
-            type="number"
-            min="1"
-            max="8"
-            value={tableroEsperado[8]}
-            className={styles.cell_inicial}
-            onChange={(e) => modificarMatrizEsperado(8, e.target.value)}
-          />
-
-          <br />
-        </form>
+        )}
       </div>
 
       <div className="col-md-9">
