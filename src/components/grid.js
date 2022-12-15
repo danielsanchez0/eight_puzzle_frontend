@@ -1,11 +1,14 @@
 import styles from "./TicTacToe.module.css";
 import Ribbon from "./Ribbon"
-
+import XMLParser from 'react-xml-parser';
 import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 
 import styled from 'styled-components'
 import {Col,Row} from "reactstrap"
+
+import { Bars } from  'react-loader-spinner'
+
 
 const Content = styled.div`
   width: 400px;
@@ -121,6 +124,8 @@ let pasos = [
   "1,2,3,4,5,7,8,1",
 ]
 
+let pasoReinicio = ["","","",""]
+
 const  Grid = ()=>{
 
   const [step,setStep] = useState(0)
@@ -141,6 +146,12 @@ const  Grid = ()=>{
   const [longCaminoAnchura, setLongCaminoAnchura] = useState(0)
   const [longCaminoProfundidad, setLongCaminoProfundidad] = useState(0)
   const [longCaminoPrimero, setLongCaminoPrimero] = useState(0)
+  const [nombreAlgoritmo, setNombreAlgoritmo] = useState("")
+  const [textoArchivo, setTextoArchivo] = useState("")
+  const [nombreArchivo, setNombreArchivo] = useState("")
+  const [files, setFiles] = useState("");
+
+  const [estadoEjecucion, setEstadoEjecucion] = useState(false)
 
 
   const [tableroInicial,setTableroInicial] = useState(["","","","","","","","",""])
@@ -158,6 +169,7 @@ const  Grid = ()=>{
 
   return matriz
 }
+
 
 useEffect(() => {
   if(estado == true ){
@@ -271,10 +283,10 @@ const datosObjetivo = (tablero)=>{
   return texto
 }
 
-
 const algoritmoEstrella = ()=>{
+  setEstadoEjecucion(true)
   setEstado(true)
-  
+  setNombreAlgoritmo("Estrella")
   console.log("algoritmoEstrella")
   fetch("http://127.0.0.1:8000/puzzle-estrella", {
       method: "POST",
@@ -288,11 +300,12 @@ const algoritmoEstrella = ()=>{
     })
       .then((res) => res.json())
       .then((result) => {
-        
+        setEstadoEjecucion(false)
         pasos = result["movimientos"];
         setAEstrellaNodos(result["cantidad"])
         setLongCaminoEstrella(result["longitudSol"])
         console.log(aEstrellaNodos);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -300,8 +313,9 @@ const algoritmoEstrella = ()=>{
 }
 
 const algoritmoAnchura = ()=>{
+  setNombreAlgoritmo("Anchura")
   setEstado(true)
-  
+  setEstadoEjecucion(true)
   console.log("algoritmoAnchura")
   fetch("http://127.0.0.1:8000/puzzle-anchura", {
       method: "POST",
@@ -319,10 +333,11 @@ const algoritmoAnchura = ()=>{
         pasos = result["movimientos"];
         setAnchuraNodos(result["cantidad"]);
         setLongCaminoAnchura(result["longitudSol"])
-        alert(result["cantidad"])
+        //alert(result["cantidad"])
         console.log("ANCHUARA " +anchuraNodos);
         console.log("ESTRELLA " + aEstrellaNodos);
         console.log(pasos);
+        setEstadoEjecucion(false)
       })
       .catch((err) => {
         console.log(err);
@@ -331,7 +346,8 @@ const algoritmoAnchura = ()=>{
 
 const algoritmoPrimero= ()=>{
   setEstado(true)
-  
+  setNombreAlgoritmo("Primero")
+  setEstadoEjecucion(true) 
   console.log("algoritmoPrimero")
   fetch("http://127.0.0.1:8000/puzzle-primero", {
       method: "POST",
@@ -345,7 +361,7 @@ const algoritmoPrimero= ()=>{
     })
       .then((res) => res.json())
       .then((result) => {
-        
+        setEstadoEjecucion(false)
         pasos = result["movimientos"];
         setPrimeroNodos(result["cantidad"]);
         setLongCaminoPrimero(result["longitudSol"])
@@ -363,6 +379,7 @@ const algoritmoPrimero= ()=>{
 
 const algoritmoProfundidad = ()=>{
   setEstado(true)
+  setNombreAlgoritmo("Profundidad")
   
   console.log("algoritmoAnchura")
   fetch("http://127.0.0.1:8000/puzzle-profundidad", {
@@ -390,6 +407,37 @@ const algoritmoProfundidad = ()=>{
       });
 }
 
+const leerArchivo = (e) => {
+  alert("hola")
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  console.log(file)
+  reader.readAsText(file);
+  reader.onload = () => {
+    //console.log(reader.result);
+    leerXML(reader.result)
+  }
+
+  reader.onerror = () => {
+    console.log(reader.result);
+  }
+}
+
+const leerXML = (e) => {
+  alert("hola")
+  var xml = new XMLParser().parseFromString(e);
+  var ya = xml.getElementsByTagName("Inicios")
+  var nums = [];
+  alert(ya[0].children.length)
+  for (let index = 0; index < ya[0].children.length; index++) {
+    console.log(ya[0].children[index].value)
+    
+  }
+  //console.log(ya[0].children[0].value)
+  //console.log(ya[0])
+
+}
+
 	return (
     <div className="row">
       <div className="col-md-3">
@@ -398,22 +446,24 @@ const algoritmoProfundidad = ()=>{
                     <button type='button' className={styles.button} onClick={aprobarMatriz} > Aprobar </button>
                     
                   </ButtonContainer>
+                 
 
         <ContentWrapper>
+        
         <form>
         <p>estado inicial</p>
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(0,e.target.value)} />
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(1,e.target.value)} />
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(2,e.target.value)} />
+                      <input type="number" min="1" max="8" value={1} maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(0,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(1,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(2,e.target.value)} />
                       <br/>
 
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(3,e.target.value)} />
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(4,e.target.value)} />
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(5,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(3,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(4,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(5,e.target.value)} />
                       <br/>
 
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(6,e.target.value)} />
-                      <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(7,e.target.value)}/>
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(6,e.target.value)} />
+                      <input type="number" min="1" max="8" maxLength={1} className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(7,e.target.value)}/>
                       <input type="number" min="1" max="8" className={styles.cell_inicial} onChange={(e)=>modificarMatrizInicial(8,e.target.value)}/>
 
                       <br />
@@ -444,12 +494,41 @@ const algoritmoProfundidad = ()=>{
       </div>
 
       <div className="col-md-9">
+      <div className="col-md-3">
+  
+      <input
+                type="file"
+                accept="application/xml"
+                name="files"
+                onChange={leerArchivo}
+              />
+      <button
+                className="btn btn-primary"
+                
+              >
+                Insertar Archivo
+              </button>
+                  
+      </div>
         <AppWrapper>
         <ContentWrapper>
               <Content>
                 <Ribbon>8-Puzzle</Ribbon>
-                <p>Solved with the A-star Algorithm</p>
-  
+
+                {
+                  estadoEjecucion?
+                  <Bars
+  height="80"
+  width="80"
+  color="#4fa94d"
+  ariaLabel="bars-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+/>
+                  
+                  :<p>Algortimo {nombreAlgoritmo} en ejecución</p>
+                }
 
                     <div className={styles.container}>
                       <div className={styles.col}>
@@ -494,7 +573,7 @@ const algoritmoProfundidad = ()=>{
                     <button type='button' className={styles.button} onClick={algoritmoEstrella} > A* </button>
                     <button type='button' className={styles.button} onClick={algoritmoAnchura}> Anchura </button>
                     <button type='button' className={styles.button} onClick={algoritmoProfundidad}> Profundidad </button>
-                    <button type='button' className={styles.button} onClick={algoritmoPrimero}> Voraz </button>
+                    <button type='button' className={styles.button} onClick={algoritmoPrimero}> Primero Mejor </button>
                     <button type='button' className={styles.button} > Costo Uniforme </button>
                   </ButtonContainer>
                   </div>
