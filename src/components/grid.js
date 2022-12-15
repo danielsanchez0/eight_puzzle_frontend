@@ -8,6 +8,24 @@ import styled from "styled-components";
 import { Col, Row } from "reactstrap";
 
 import { Bars } from "react-loader-spinner";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Content = styled.div`
   width: 400px;
@@ -144,6 +162,23 @@ const Grid = () => {
   const [textoArchivo, setTextoArchivo] = useState("");
   const [nombreArchivo, setNombreArchivo] = useState("");
   const [files, setFiles] = useState("");
+  const [mostrar, setMostrar] = useState(0);
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+  const labels = ["Anchura", "Profundidad", "Primero el mejor", "A*"];
+  const [data, setData] = useState({});
+  // const data = {
+  //   labels,
+  //   datasets: [
+  //     {
+  //       label: "Dataset 1",
+  //       data: ["100", "200", "300", "400", "500", "600", "700"],
+  //       backgroundColor: "rgba(255, 99, 132, 0.5)",
+  //     },
+  //   ],
+  // };
 
   const [estadoEjecucion, setEstadoEjecucion] = useState(false);
 
@@ -329,7 +364,7 @@ const Grid = () => {
         pasos = result["movimientos"];
         setAEstrellaNodos(result["cantidad"]);
         setAEstrellaNodos(result["cantidad"]);
-        alert("Cantidad de nodos: " + result["cantidad"]);
+        //alert("Cantidad de nodos: " + result["cantidad"]);
         setLongCaminoEstrella(result["longitudSol"]);
 
         console.log(aEstrellaNodos);
@@ -472,6 +507,58 @@ const Grid = () => {
     document.body.removeChild(element);
   };
 
+  const cambiar = () => {};
+
+  const estadisticas = () => {
+    if (mostrar == 0) {
+      setData({
+        labels,
+        datasets: [
+          {
+            label: "Cantidad de nodos",
+            data: [
+              aEstrellaNodos,
+              profundidadNodos,
+              anchuraNodos,
+              primeroNodos,
+            ],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.5)",
+              "rgba(54, 162, 235, 0.5)",
+              "rgba(255, 206, 86, 0.5)",
+              "rgba(75, 192, 192, 0.5)",
+            ],
+          },
+        ],
+      });
+      setMostrar(1);
+    } else if (mostrar == 1) {
+      setData({
+        labels,
+        datasets: [
+          {
+            label: "Longitud de camino",
+            data: [
+              longCaminoEstrella,
+              longCaminoProfundidad,
+              longCaminoAnchura,
+              longCaminoPrimero,
+            ],
+            backgroundColor: [
+              "rgba(0, 255, 0, 0.2)",
+              "rgba(54, 162, 235, 0.5)",
+              "rgba(255, 206, 86, 0.5)",
+              "rgba(75, 192, 192, 0.5)",
+            ],
+          },
+        ],
+      });
+      setMostrar(2);
+    } else if (mostrar == 2) {
+      setMostrar(0);
+    }
+  };
+
   const leerXML = (e) => {
     var xml = new XMLParser().parseFromString(e);
     var valoresIniciales = xml.getElementsByTagName("Inicios");
@@ -550,7 +637,7 @@ const Grid = () => {
     //console.log(valoresIniciales[0])
   };
 
-  return (
+  return mostrar == 0 ? (
     <div className="row">
       <div className="col-md-3">
         <ButtonContainer>
@@ -837,10 +924,18 @@ const Grid = () => {
                     <button
                       type="button"
                       className={styles.button}
-                      onClick={downloadXML}
+                      onClick={estadisticas}
                     >
                       {" "}
                       Estadisticas{" "}
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.button}
+                      onClick={downloadXML}
+                    >
+                      {" "}
+                      XML{" "}
                     </button>
                     {/* <button type='button' className={styles.button} > Costo Uniforme </button> */}
                   </ButtonContainer>
@@ -856,6 +951,24 @@ const Grid = () => {
           </ContentWrapper>
         </AppWrapper>
       </div>
+    </div>
+  ) : mostrar == 1 ? (
+    <div style={{ with: "100%", height: "500px" }}>
+      <p>Cantidad de nodos</p>
+      <Bar options={options} data={data} />
+      <button type="button" className={styles.button} onClick={estadisticas}>
+        {" "}
+        Siguiente{" "}
+      </button>
+    </div>
+  ) : (
+    <div style={{ with: "100%", height: "500px" }}>
+      <p>Longitud del camino </p>
+      <Bar options={options} data={data} />
+      <button type="button" className={styles.button} onClick={estadisticas}>
+        {" "}
+        Siguiente{" "}
+      </button>
     </div>
   );
 };
