@@ -562,8 +562,14 @@ const Grid = () => {
     var valoresIniciales = xml.getElementsByTagName("Inicios");
     var valoresObjetivo = xml.getElementsByTagName("Objetivos");
     var nums = [];
+    setAprobacion(false);
     setTableroEsperado(["", "", "", "", "", "", "", "", ""]);
     setTableroInicial([["", "", "", "", "", "", "", "", ""]]);
+    setBoard([
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ]);
     if (
       valoresIniciales != null &&
       valoresIniciales[0].children.length == 9 &&
