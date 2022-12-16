@@ -524,17 +524,12 @@ const Grid = () => {
           {
             label: "Cantidad de nodos",
             data: [
-              aEstrellaNodos,
-              profundidadNodos,
               anchuraNodos,
+              profundidadNodos,
               primeroNodos,
+              aEstrellaNodos,
             ],
-            backgroundColor: [
-              "#FF5733",
-              "#FFC300",
-              "#3E5569",
-              "rgba(75, 192, 192, 0.5)",
-            ],
+            backgroundColor: ["#FF5733", "#FFC300", "#3E5569", "#008000"],
           },
         ],
       });
@@ -546,17 +541,13 @@ const Grid = () => {
           {
             label: "Longitud de camino",
             data: [
-              longCaminoEstrella,
-              longCaminoProfundidad,
               longCaminoAnchura,
+              longCaminoProfundidad,
+
               longCaminoPrimero,
+              longCaminoEstrella,
             ],
-            backgroundColor: [
-              "#FF5733",
-              "#FFC300",
-              "#3E5569",
-              "rgba(75, 192, 192, 0.5)",
-            ],
+            backgroundColor: ["#FF5733", "#FFC300", "#3E5569", "#008000"],
           },
         ],
       });
@@ -571,7 +562,8 @@ const Grid = () => {
     var valoresIniciales = xml.getElementsByTagName("Inicios");
     var valoresObjetivo = xml.getElementsByTagName("Objetivos");
     var nums = [];
-
+    setTableroEsperado(["", "", "", "", "", "", "", "", ""]);
+    setTableroInicial([["", "", "", "", "", "", "", "", ""]]);
     if (
       valoresIniciales != null &&
       valoresIniciales[0].children.length == 9 &&
