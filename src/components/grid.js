@@ -234,7 +234,7 @@ const Grid = () => {
           setEstado(false);
           setStep(0);
           alerta(
-            "Se ha terminado el proceso de busqueda",
+            "Se ha terminado el proceso de búsqueda",
             "Busqueda finalizada",
             "success"
           );
@@ -314,10 +314,10 @@ const Grid = () => {
       verificarElementosRepetidos(tableroEsperado)
     ) {
       setAprobacion(true);
-      alerta("La matriz cumple los requisitos", "Aprobado", "success");
+      alerta("Las matrices cumplen los requisitos", "Aprobado", "success");
     } else {
       setAprobacion(false);
-      alerta("La matriz no cumple los requisitos", "Error", "info");
+      alerta("No se cumplen los requisitos", "Error", "info");
     }
   };
 
@@ -413,7 +413,7 @@ const Grid = () => {
 
   const algoritmoPrimero = () => {
     setEstado(true);
-    setNombreAlgoritmo("Primero");
+    setNombreAlgoritmo("Primero el mejor");
     setEstadoEjecucion(true);
     setBoard([
       ["", "", ""],
@@ -571,13 +571,14 @@ const Grid = () => {
     var valoresIniciales = xml.getElementsByTagName("Inicios");
     var valoresObjetivo = xml.getElementsByTagName("Objetivos");
     var nums = [];
-    alert(valoresIniciales[0].children.length);
+
     if (
       valoresIniciales != null &&
       valoresIniciales[0].children.length == 9 &&
       valoresObjetivo != null &&
       valoresObjetivo[0].children.length == 9
     ) {
+      alerta("", "Archivo cargado correctamente", "success");
       setTableroInicial([
         valoresIniciales[0].children[0].value == 0
           ? ""
@@ -654,7 +655,7 @@ const Grid = () => {
             onClick={aprobarMatriz}
           >
             {" "}
-            Aprobar{" "}
+            Verificar{" "}
           </button>
         </ButtonContainer>
         <input
@@ -1084,7 +1085,7 @@ const Grid = () => {
                       className={styles.button}
                       onClick={downloadXML}
                     >
-                      XML
+                      Reporte
                     </button>
                     {/* <button type='button' className={styles.button} > Costo Uniforme </button> */}
                   </ButtonContainer>
@@ -1092,7 +1093,7 @@ const Grid = () => {
               ) : (
                 <div>
                   <p>
-                    Presiona aprobar para verificar la validez de tus valores.
+                    Presiona verificar para verificar la validez de tus valores.
                   </p>
                 </div>
               )}
@@ -1107,7 +1108,7 @@ const Grid = () => {
       <Bar options={options} data={data} />
       <button type="button" className={styles.button} onClick={estadisticas}>
         {" "}
-        Siguiente{" "}
+        Siguiente Gráfica{" "}
       </button>
     </div>
   ) : (
@@ -1116,7 +1117,7 @@ const Grid = () => {
       <Bar options={options} data={data} />
       <button type="button" className={styles.button} onClick={estadisticas}>
         {" "}
-        Siguiente{" "}
+        Inicio{" "}
       </button>
     </div>
   );
